@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taman Finansial</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div id="main-app">
+        <header>
+            <div id="user-profile">
+                <img id="userPhoto" src="default-avatar.png" alt="Foto Profil">
+                <span id="userNameDisplay">Memuat...</span>
+            </div>
+            <h1>Taman Finansial</h1>
+            <div id="infoSaldo">Saldo: IDR 0</div>
+            <div class="header-buttons">
+                <button id="bukaLaporanBtn" class="tombol-header">📊 Laporan</button>
+                <button id="bukaRiwayatBtn" class="tombol-header">📜 Riwayat</button>
+                <button id="bukaPengaturanBtn" class="tombol-header">⚙️ Pengaturan</button>
+                <button id="logoutBtn" class="tombol-header">🚪 Keluar</button>
+            </div>
+        </header>
+        <main>
+            <div id="taman-container">
+                <img id="pohon-utama" src="pohon-1.png" alt="Pot Pohon">
+                <div id="petak-bunga-container"></div>
+            </div>
+            <button id="tambahTransaksiBtn" class="tombol-aksi">＋ Tambah Transaksi</button>
+            <div id="sasaran-container">
+                <h2>🎯 Sasaranku</h2>
+                <div id="sasaran-list">
+                    </div>
+            </div>
+        </main>
+    </div>
+
+    <dialog id="transaksiModal">
+        <form id="transaksiForm">
+            <h2>Tambah Transaksi Baru</h2>
+            <div class="tipe-transaksi">
+                <input type="radio" id="pemasukan" name="tipe" value="pemasukan" checked>
+                <label for="pemasukan">Pemasukan</label>
+                <input type="radio" id="pengeluaran" name="tipe" value="pengeluaran">
+                <label for="pengeluaran">Pengeluaran</label>
+            </div>
+            <label for="jumlah">Jumlah:</label>
+            <input type="text" id="jumlah" inputmode="numeric" required>
+            <input type="hidden" id="editTransaksiId">
+            <label for="kategori">Kategori:</label>
+            <select id="kategori">
+                <option value="gaji">Gaji (Pemasukan)</option>
+            </select>
+            <label for="deskripsi">Deskripsi (Opsional):</label>
+            <input type="text" id="deskripsi">
+            <div class="form-actions">
+                <button type="button" class="tutup-modal-btn">Batal</button>
+                <button type="submit">Simpan Transaksi</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="riwayatModal">
+        <h2>📜 Riwayat Transaksi</h2>
+        <div id="filter-container">
+            <input type="search" id="searchInput" placeholder="Cari deskripsi transaksi...">
+            <div class="filter-grup">
+                <select id="filterKategori">
+                    <option value="semua">Semua Kategori</option>
+                </select>
+                <div id="filterTipe" class="tipe-transaksi">
+                    <input type="radio" id="tipeSemua" name="filterTipe" value="semua" checked>
+                    <label for="tipeSemua">Semua</label>
+                    <input type="radio" id="tipePemasukan" name="filterTipe" value="pemasukan">
+                    <label for="tipePemasukan">Pemasukan</label>
+                    <input type="radio" id="tipePengeluaran" name="filterTipe" value="pengeluaran">
+                    <label for="tipePengeluaran">Pengeluaran</label>
+                </div>
+            </div>
+        </div>
+        <div id="riwayat-list-container"></div>
+        <div class="form-actions">
+            <button type="button" class="tutup-modal-btn">Tutup</button>
+        </div>
+    </dialog>
+
+    <dialog id="pengaturanModal">
+        <form id="pengaturanForm">
+            <h2>⚙️ Pengaturan</h2>
+            <label for="settingUserName">Nama Panggilan:</label>
+            <input type="text" id="settingUserName" required>
+            <h4>Ubah Anggaran Bulanan:</h4>
+            <div id="category-editor-container"></div>
+            <button type="button" id="tambahKategoriBtn" class="tombol-sekunder">＋ Tambah Kategori</button>
+
+            <hr class="separator">
+            <h4>Kelola Sasaran Finansial:</h4>
+            <div id="daftar-sasaran-pengaturan">
+                </div>
+            <button type="button" id="tambahSasaranBtn" class="tombol-sekunder">＋ Tambah Sasaran Baru</button>
+
+            <hr class="separator">
+            <h4>Kelola Transaksi Berulang:</h4>
+            <div id="daftar-transaksi-berulang">
+                </div>
+            <button type="button" id="tambahTransaksiBerulangBtn" class="tombol-sekunder">＋ Tambah Transaksi Berulang</button>
+
+            <div class="form-actions">
+                <button type="button" class="tutup-modal-btn">Batal</button>
+                <button type="submit">Simpan Perubahan</button>
+            </div>
+        </form>
+        <div class="pengaturan-item">
+            <label for="themeToggleBtn">Mode Gelap</label>
+            <button type="button" id="themeToggleBtn" class="toggle-btn">
+                <span class="toggle-indicator"></span>
+            </button>
+        </div>
+        <hr class="separator">
+        <div class="area-berbahaya">
+            <h4>Area Berbahaya</h4>
+            <p>Tindakan ini akan menghapus semua data Anda secara permanen.</p>
+            <button id="resetDataBtn" class="tombol-bahaya">Reset Semua Data Akun</button>
+        </div>
+    </dialog>
+
+    <dialog id="laporanModal">
+        <h2>📊 Laporan Pengeluaran Bulan Ini</h2>
+        <div id="laporan-container">
+            <div class="chart-container" style="position: relative; height:300px; width:100%;">
+                <canvas id="expenseChart"></canvas>
+            </div>
+            <div id="laporan-summary"></div>
+        </div>
+        <div class="form-actions">
+            <button type="button" class="tutup-modal-btn">Tutup</button>
+        </div>
+    </dialog>
+
+    <dialog id="sasaranModal">
+        <form id="sasaranForm">
+            <h2 id="sasaranModalTitle">Tambah Sasaran Baru</h2>
+            <input type="hidden" id="editSasaranId">
+            <label for="namaSasaran">Nama Sasaran (Contoh: Laptop Baru)</label>
+            <input type="text" id="namaSasaran" required>
+            <label for="targetJumlah">Target Dana (Rp)</label>
+            <input type="text" id="targetJumlah" inputmode="numeric" required>
+            <div class="form-actions">
+                <button type="button" class="tutup-modal-btn">Batal</button>
+                <button type="submit">Simpan Sasaran</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="alokasiModal">
+        <form id="alokasiForm">
+            <h2>Alokasikan Dana</h2>
+            <p>Untuk Sasaran: <strong id="alokasiNamaSasaran"></strong></p>
+            <input type="hidden" id="alokasiSasaranId">
+            <label for="jumlahAlokasi">Jumlah Alokasi (Rp)</label>
+            <input type="text" id="jumlahAlokasi" inputmode="numeric" required>
+            <div class="form-actions">
+                <button type="button" class="tutup-modal-btn">Batal</button>
+                <button type="submit">Alokasikan</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="berulangModal">
+        <form id="berulangForm">
+            <h2 id="berulangModalTitle">Transaksi Berulang Baru</h2>
+            <input type="hidden" id="editBerulangId">
+            
+            <div class="tipe-transaksi">
+                <input type="radio" id="berulangPemasukan" name="berulangTipe" value="pemasukan" checked>
+                <label for="berulangPemasukan">Pemasukan</label>
+                <input type="radio" id="berulangPengeluaran" name="berulangTipe" value="pengeluaran">
+                <label for="berulangPengeluaran">Pengeluaran</label>
+            </div>
+
+            <label for="berulangDeskripsi">Deskripsi (Contoh: Gaji Bulanan)</label>
+            <input type="text" id="berulangDeskripsi" required>
+
+            <label for="berulangJumlah">Jumlah (Rp)</label>
+            <input type="text" id="berulangJumlah" inputmode="numeric" required>
+
+            <label for="berulangKategori">Kategori</label>
+            <select id="berulangKategori"></select>
+
+            <label for="hariEksekusi">Dijalankan Setiap Tanggal:</label>
+            <input type="number" id="hariEksekusi" min="1" max="31" required placeholder="1-31">
+
+            <div class="form-actions">
+                <button type="button" class="tutup-modal-btn">Batal</button>
+                <button type="submit">Simpan</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="custom-modal">
+        <h2 id="custom-modal-title">Judul Notifikasi</h2>
+        <p id="custom-modal-text">Ini adalah isi pesan notifikasi.</p>
+        <div id="custom-modal-actions" class="form-actions">
+            </div>
+    </dialog>
+
+    <div id="toast-notification"></div>
+
+    <script src="app.js" type="module"></script>
+</body>
+
+</html>

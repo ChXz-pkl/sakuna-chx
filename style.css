@@ -1,0 +1,833 @@
+:root {
+    --primary-color: #4CAF50;
+    --secondary-color: #8BC34A;
+    --background-color: #F0F4F0;
+    --text-color: #333;
+    --modal-bg: #ffffff;
+    --shadow: 0 4px 8px rgba(0,0,0,0.1);
+    --input-border-color: #ccc;
+    --danger-color: #D32F2F;
+    --skala-pohon: 1;
+}
+
+body.dark-mode {
+    --primary-color: #66bb6a;
+    --secondary-color: #9ccc65;
+    --background-color: #121212;
+    --text-color: #e0e0e0;
+    --modal-bg: #1e1e1e;
+    --shadow: 0 4px 8px rgba(0,0,0,0.3);
+    --input-border-color: #444;
+    --danger-color: #ef5350;
+}
+
+body {
+    font-family: sans-serif;
+    margin: 20px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#infoSaldo {
+    font-size: 1.2em;
+    margin-top: 10px;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    max-width: 600px;
+}
+
+#taman-container {
+    position: relative;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#pohon-utama {
+    width: 150px;
+    height: auto;
+    transition: transform 0.3s ease-in-out;
+}
+
+#petak-bunga-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+.info-anggaran {
+    font-size: 14px;
+}
+.petak-bunga {
+    background-color: var(--modal-bg);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    width: 120px;
+}
+
+.petak-bunga img {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 5px;
+}
+
+/* PERBAIKAN: Menambahkan style untuk status waspada agar ada feedback visual */
+.petak-bunga.waspada img {
+    filter: saturate(50%);
+    opacity: 0.8;
+}
+
+.petak-bunga.layu img {
+    filter: grayscale(100%);
+}
+
+.tombol-aksi {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 20px;
+}
+
+.tombol-aksi:hover {
+    background-color: var(--secondary-color);
+}
+
+dialog {
+    background-color: var(--modal-bg);
+    color: var(--text-color);
+    border: none;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    max-width: 400px;
+    width: 90%;
+}
+
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+dialog h2 {
+    margin-top: 0;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input, select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: transparent;
+    color: var(--text-color);
+}
+
+/* Memperbaiki warna dropdown di mode gelap */
+select option {
+    background-color: var(--modal-bg);
+    color: var(--text-color);
+}
+
+/* Sembunyikan radio button asli */
+.tipe-transaksi input[type="radio"] {
+    display: none;
+}
+
+/* Gunakan Grid untuk membuat 2 kolom yang sama besar */
+.tipe-transaksi {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* Ubah tampilan label menjadi seperti tombol */
+.tipe-transaksi label {
+    padding: 12px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    font-weight: bold;
+    color: var(--text-color); /* Pastikan warna teks sesuai tema */
+}
+
+/* Beri efek hover saat kursor di atas tombol */
+.tipe-transaksi label:hover {
+    background-color: rgba(128, 128, 128, 0.1);
+}
+
+/* INI BAGIAN PENTINGNYA: Mengubah style saat tombol radio DIPILIH */
+
+/* Jika radio "pemasukan" dipilih, beri warna hijau pada labelnya */
+.tipe-transaksi input[id="pemasukan"]:checked + label {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: white;
+}
+
+/* Jika radio "pengeluaran" dipilih, beri warna merah pada labelnya */
+.tipe-transaksi input[id="pengeluaran"]:checked + label {
+    background-color: var(--danger-color);
+    border-color: var(--danger-color);
+    color: white;
+}
+
+/* Memperbaiki warna label radio button di mode gelap */
+.tipe-transaksi label {
+    color: var(--text-color);
+}
+
+.radio-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.radio-buttons input {
+    width: auto;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.form-actions button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#tutupModalTransaksi, #tutupRiwayatModal, #tutupPengaturanModal {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+#tutupModalTransaksi:hover, #tutupRiwayatModal:hover, #tutupPengaturanModal:hover {
+    background-color: #4ba766ff;
+}
+
+#onboardingForm button, #pengaturanForm button:last-child {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+#onboardingForm button:hover, #pengaturanForm button:last-child:hover {
+    background-color: var(--secondary-color);
+}
+
+.preset-budgets {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.preset-btn {
+    background-color: #f0f0f0;
+    color: var(--text-color);
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.preset-btn:hover {
+    background-color: #e0e0e0;
+}
+
+/* Styling untuk Header */
+.tombol-header {
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.tombol-header:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.header-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+/* Style untuk Profil Pengguna di Header */
+#user-profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+#userPhoto {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%; /* Membuat gambar menjadi bulat */
+    border: 2px solid var(--primary-color); /* Tambah bingkai agar lebih menarik */
+}
+
+#userNameDisplay {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+/* Styling untuk container list di modal Riwayat */
+#riwayat-list-container {
+    max-height: 60vh; /* Batasi tinggi agar bisa di-scroll */
+    overflow-y: auto; /* Aktifkan scroll jika konten panjang */
+    text-align: left;
+    margin: 20px 0;
+}
+
+/* Styling untuk setiap item transaksi */
+.riwayat-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    align-items: center; /* Menyelaraskan item secara vertikal */
+}
+
+.riwayat-item:last-child {
+    border-bottom: none;
+}
+
+.riwayat-item-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.riwayat-item-deskripsi {
+    font-weight: bold;
+}
+
+.riwayat-item-kategori {
+    font-size: 0.8em;
+    color: #666;
+    text-transform: capitalize;
+}
+
+.riwayat-item-jumlah {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+/* Warna berbeda untuk pemasukan dan pengeluaran */
+.riwayat-item-jumlah.pemasukan {
+    color: var(--secondary-color);
+}
+
+.riwayat-item-jumlah.pengeluaran {
+    color: #D32F2F; /* Merah untuk pengeluaran */
+}
+
+.riwayat-item-kanan {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tombol-hapus-tx {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    padding: 5px;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.tombol-hapus-tx:hover {
+    opacity: 1;
+    color: var(--danger-color);
+}
+
+.separator {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 2em 0;
+}
+
+.area-berbahaya {
+    text-align: left;
+}
+
+.area-berbahaya h4 {
+    color: #D32F2F;
+}
+
+.area-berbahaya p {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.tombol-bahaya {
+    background-color: #D32F2F;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+}
+
+.pengaturan-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5em;
+}
+
+.toggle-btn {
+    position: relative;
+    width: 50px;
+    height: 28px;
+    background-color: #ccc;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.toggle-indicator {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 24px;
+    height: 24px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Style saat toggle aktif (mode gelap) */
+body.dark-mode .toggle-btn {
+    background-color: var(--primary-color);
+}
+
+body.dark-mode .toggle-indicator {
+    transform: translateX(22px);
+}
+
+/* Styling untuk editor budget dinamis */
+#category-editor-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.category-editor-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.category-editor-row input:first-child {
+    flex: 1; /* Input nama kategori lebih fleksibel */
+}
+
+.category-editor-row input:last-of-type {
+    flex: 2; /* Input jumlah lebih lebar */
+}
+
+.tombol-hapus-kategori {
+    background-color: transparent;
+    border: none;
+    color: var(--danger-color);
+    cursor: pointer;
+    font-size: 1.5em;
+    padding: 0 5px;
+}
+
+.tombol-sekunder {
+    background-color: #e0e0e0;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+
+/* Styling untuk tombol edit dan hapus pada riwayat */
+.tombol-edit-tx, .tombol-hapus-tx {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    padding: 5px;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.tombol-edit-tx:hover {
+    opacity: 1;
+    color: var(--primary-color);
+}
+
+.tombol-hapus-tx:hover {
+    opacity: 1;
+    color: var(--danger-color);
+}
+
+
+/* PENAMBAHAN: Styling untuk konten Laporan */
+#laporan-summary {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 1.1em;
+}
+
+#laporan-summary p {
+    margin: 5px 0;
+}
+
+/* PENAMBAHAN: Styling untuk filter di modal riwayat */
+#filter-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--input-border-color);
+}
+
+#filter-container input[type="search"] {
+    width: 100%;
+}
+
+.filter-grup {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap; /* Agar responsif di layar kecil */
+}
+
+.filter-grup select {
+    flex-grow: 1; /* Biarkan select memanjang */
+}
+
+/* Mengatur ulang gaya untuk radio button di filter */
+#filterTipe {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+#filterTipe input[type="radio"] {
+    width: auto;
+    margin: 0;
+}
+#filterTipe label {
+    margin-bottom: 0;
+    font-weight: normal;
+    font-size: 0.9em;
+}
+
+/* style.css (TAMBAHKAN INI DI AKHIR FILE) */
+
+.auth-page {
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.auth-container {
+    background-color: var(--modal-bg);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    width: 100%;
+    max-width: 400px;
+}
+
+.auth-container h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.auth-container p {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #888;
+}
+
+.auth-container form button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.auth-toggle {
+    font-size: 0.9em;
+    margin-top: 20px !important;
+}
+
+.auth-toggle a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.error-message {
+    color: var(--danger-color);
+    margin-top: 15px !important;
+    font-weight: bold;
+    min-height: 1.2em;
+}
+
+/* ================================================================= */
+/* ==> STYLE UNTUK TAMPILAN HP (RESPONSIVE DESIGN) <== */
+/* ================================================================= */
+@media screen and (max-width: 600px) {
+
+    /* 1. Atur Ulang Layout Umum */
+    body {
+        margin: 10px; /* Kurangi margin di sisi layar */
+    }
+
+    header {
+        width: 100%;
+    }
+    
+    main {
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 1.8em; /* Sedikit perkecil judul utama */
+    }
+
+    dialog h2 {
+        font-size: 1.3em; /* Perkecil judul di dalam modal */
+    }
+
+
+    /* 2. Atur Ulang Header */
+    .header-buttons {
+        flex-wrap: wrap; /* Izinkan tombol untuk turun ke baris baru jika tidak muat */
+        gap: 8px;
+    }
+
+    .tombol-header {
+        font-size: 0.9em; /* Perkecil sedikit ukuran tombol header */
+        padding: 6px 12px;
+    }
+
+
+    /* 3. Atur Ulang Modal */
+    dialog {
+        width: 95%; /* Buat modal hampir selebar layar */
+        padding: 15px;
+    }
+
+    .auth-container {
+        padding: 20px;
+        width: 90%;
+    }
+
+
+    /* 4. Perbaiki Tampilan Item Riwayat */
+    .riwayat-item {
+        flex-direction: column; /* Ubah dari horizontal menjadi vertikal */
+        align-items: flex-start; /* Ratakan semua ke kiri */
+        gap: 8px;
+    }
+
+    .riwayat-item-kanan {
+        width: 100%; /* Buat bagian bawah (jumlah & tombol) jadi lebar penuh */
+        justify-content: space-between; /* Pisahkan jumlah dan tombol aksi */
+    }
+
+
+    /* 5. Perbaiki Form Pengaturan Anggaran */
+    .category-editor-row {
+        flex-direction: column; /* Ubah dari horizontal menjadi vertikal */
+        align-items: stretch; /* Buat semua elemen selebar kontainer */
+        gap: 8px;
+    }
+}
+
+/* style.css (tambahkan di akhir file) */
+
+/* ================================================= */
+/* ==> STYLE UNTUK MODAL NOTIFIKASI KUSTOM <== */
+/* ================================================= */
+#custom-modal {
+    max-width: 350px;
+    text-align: center;
+}
+
+#custom-modal-actions {
+    justify-content: center; /* Tombol di tengah */
+}
+
+/* Tombol Aksi Kustom */
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+}
+
+.btn-secondary {
+    background-color: #888;
+    color: white;
+}
+.btn-secondary:hover {
+    background-color: #666;
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+}
+.btn-danger:hover {
+    background-color: #a52525;
+}
+
+/* style.css (tambahkan di akhir file) */
+
+/* ================================================= */
+/* ==> STYLE UNTUK NOTIFIKASI TOAST <==     */
+/* ================================================= */
+#toast-notification {
+    position: fixed; /* Tetap di layar saat di-scroll */
+    top: 20px;
+    left: 50%;
+    transform: translate(-50%, -100px); /* Mulai dari atas layar */
+    padding: 12px 20px;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    z-index: 1000; /* Pastikan selalu di paling depan */
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.4s ease; /* Animasi halus */
+}
+
+/* Kelas untuk memunculkan notifikasi */
+#toast-notification.show {
+    transform: translate(-50%, 0); /* Geser ke posisi normal */
+    opacity: 1;
+}
+
+/* Warna untuk notifikasi sukses (hijau) */
+#toast-notification.success {
+    background-color: var(--primary-color);
+}
+
+/* Warna untuk notifikasi error (merah) */
+#toast-notification.error {
+    background-color: var(--danger-color);
+}
+
+/* style.css (tambahkan di akhir file) */
+
+/* ================================================= */
+/* ==> STYLE UNTUK SASARAN FINANSIAL <== */
+/* ================================================= */
+
+#sasaran-container {
+    width: 100%;
+    margin-top: 40px;
+    text-align: center;
+}
+
+#sasaran-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    text-align: left;
+}
+
+.kartu-sasaran {
+    background-color: var(--modal-bg);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.kartu-sasaran h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.progress-bar-container {
+    background-color: var(--background-color);
+    border-radius: 20px;
+    height: 20px;
+    width: 100%;
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+.progress-bar-fill {
+    background-color: var(--secondary-color);
+    height: 100%;
+    width: 0%; /* Diatur oleh JS */
+    border-radius: 20px;
+    transition: width 0.5s ease;
+}
+
+.info-sasaran {
+    font-size: 0.9em;
+    color: #888;
+}
+
+.kartu-sasaran .tombol-aksi {
+    width: 100%;
+    margin-top: 15px;
+    padding: 8px;
+}
+
+/* Style untuk manajemen sasaran di modal pengaturan */
+#daftar-sasaran-pengaturan .riwayat-item {
+    font-size: 0.9em;
+}
