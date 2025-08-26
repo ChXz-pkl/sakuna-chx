@@ -166,27 +166,44 @@ function initAppForUser() {
 // =================================================================
 // FUNGSI RENDER Tampilan
 // =================================================================
+// app.js
+
 function renderTaman(userData, transaksi) {
     if (!userData || !transaksi) return;
 
+    // --- Tidak ada perubahan di bagian Saldo ---
     let totalPemasukan = transaksi.filter(tx => tx.tipe === 'pemasukan').reduce((sum, tx) => sum + tx.jumlah, 0);
     let totalPengeluaran = transaksi.filter(tx => tx.tipe === 'pengeluaran').reduce((sum, tx) => sum + tx.jumlah, 0);
     const saldo = totalPemasukan - totalPengeluaran;
-
     infoSaldo.textContent = `Saldo: ${userData.mataUang} ${saldo.toLocaleString('id-ID')}`;
 
+    // --- Tidak ada perubahan di bagian Pohon ---
     let gambarPohonBaru = 'pohon-1.png';
     if (saldo >= 5000000) gambarPohonBaru = 'pohon-3.png';
     else if (saldo >= 1000000) gambarPohonBaru = 'pohon-2.png';
     if (!pohonUtamaImg.src.endsWith(gambarPohonBaru)) pohonUtamaImg.src = gambarPohonBaru;
 
+    // --- PERUBAHAN UTAMA ADA DI SINI ---
     containerBunga.innerHTML = '';
     const anggaran = userData.anggaran;
+    const now = new Date(); // Dapatkan tanggal saat ini untuk filter
+
     Object.keys(anggaran).forEach(kategori => {
         const batasAnggaran = anggaran[kategori];
+
+        // Hitung pengeluaran HANYA untuk bulan dan tahun ini
         const pengeluaranKategori = transaksi
-            .filter(tx => tx.tipe === 'pengeluaran' && tx.kategori === kategori)
+            .filter(tx => {
+                // ==> BLOK PENYARINGAN TANGGAL DITAMBAHKAN DI SINI <==
+                if (!tx.timestamp) return false; // Pastikan transaksi punya tanggal
+                const txDate = tx.timestamp.toDate();
+                return tx.tipe === 'pengeluaran' &&
+                       tx.kategori === kategori &&
+                       txDate.getMonth() === now.getMonth() &&      // Filter berdasarkan bulan ini
+                       txDate.getFullYear() === now.getFullYear(); // Filter berdasarkan tahun ini
+            })
             .reduce((total, tx) => total + tx.jumlah, 0);
+
         const persentaseTerpakai = batasAnggaran > 0 ? (pengeluaranKategori / batasAnggaran) * 100 : 0;
 
         let statusBunga = 'sehat';
